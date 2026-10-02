@@ -1,4 +1,4 @@
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   PRIORITIES,
   SEVERITIES,
@@ -7,13 +7,16 @@ import {
   label,
 } from "./constants";
 import { selectUsers } from "./selectors";
+import { deleteTaskRequest } from "./tasksSlice";
 import type { Task } from "./types";
+import { openEditModal } from "./uiSlice";
 
 const todayISO = () => new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD (local)
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", { timeZone: "UTC" });
 
 export default function TaskCard({ task }: { task: Task }) {
+  const dispatch = useAppDispatch();
   const users = useAppSelector(selectUsers);
   const assignee = users.find((u) => u.id === task.assigneeId);
 
@@ -22,6 +25,12 @@ export default function TaskCard({ task }: { task: Task }) {
   const subtasks = task.subtasks ?? [];
   const doneCount = subtasks.filter((s) => s.completed).length;
   const criteriaCount = task.acceptanceCriteria?.length ?? 0;
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      dispatch(deleteTaskRequest(task.id));
+    }
+  };
 
   return (
     <article className={`task-card type-${task.type}`}>
@@ -32,8 +41,24 @@ export default function TaskCard({ task }: { task: Task }) {
         <span className={`status status-${task.status}`}>
           {label(STATUSES, task.status)}
         </span>
+
         <div className="task-card-actions">
-          {/* edit / delete added in a later commit */}
+          <button
+            className="btn-icon"
+            title="Edit task"
+            aria-label="Edit task"
+            onClick={() => dispatch(openEditModal(task.id))}
+          >
+            ✏️
+          </button>
+          <button
+            className="btn-icon"
+            title="Delete task"
+            aria-label="Delete task"
+            onClick={handleDelete}
+          >
+            🗑️
+          </button>
         </div>
       </div>
 
