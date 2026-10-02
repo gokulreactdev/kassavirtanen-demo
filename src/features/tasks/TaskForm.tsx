@@ -2,6 +2,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import Field from "../../components/Field";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import BugFields from "./BugFields";
+import FeatureFields from "./FeatureFields";
 import { PRIORITIES, STATUSES, TASK_TYPES } from "./constants";
 import { toFormValues, toPayload } from "./formUtils";
 import type { FormValues } from "./formUtils";
@@ -30,9 +32,11 @@ export default function TaskForm({ task, onCancel }: TaskFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = methods;
 
+  const type = watch("type");
   const cls = (err?: unknown) => `control${err ? " invalid" : ""}`;
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
@@ -163,6 +167,9 @@ export default function TaskForm({ task, onCancel }: TaskFormProps) {
             {...register("dueDate")}
           />
         </Field>
+
+        {type === "bug" && <BugFields />}
+        {type === "feature" && <FeatureFields />}
 
         {saveStatus === "failed" && (
           <div className="banner-error">{saveError}</div>
