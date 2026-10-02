@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import TaskFilters from "./features/tasks/TaskFilters";
 import TaskList from "./features/tasks/TaskList";
 import {
   fetchMetaRequest,
@@ -27,6 +28,7 @@ export default function App() {
         </button>
       </header>
 
+      <TaskFilters />
       <TaskList />
     </div>
   );
