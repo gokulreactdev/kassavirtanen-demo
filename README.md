@@ -1,75 +1,42 @@
-# React + TypeScript + Vite
+# Task Management Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A task dashboard built for a timed interview exercise. You can create, edit, delete,
+search, and filter tasks. The form adapts to the task type (Bug or Feature).
 
-Currently, two official plugins are available:
+## Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 + TypeScript (Vite)
+- Redux Toolkit for state, Redux Saga for side effects
+- React Hook Form for the task form, including dynamic field arrays
+- MSW (Mock Service Worker) as the mock API, persisted in localStorage
 
-## React Compiler
+## Getting started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open http://localhost:5173.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Create and edit tasks with validation
+- Bug tasks have severity, steps to reproduce, and subtasks
+- Feature tasks have acceptance criteria
+- Filter by project, assignee, status, and type, plus text search
+- Delete with a confirmation prompt
+- Tasks persist across page reloads
 
-```
+## Architecture
+
+- `src/mocks`: MSW handlers (`GET/POST/PUT/DELETE /api/tasks`, `GET /api/projects`, `GET /api/users`)
+- `src/api`: fetch client and typed API calls
+- `src/features/tasks`: slices, sagas, selectors, components, and form utilities
+- `src/store`: store setup, root saga, and typed hooks
+
+## Data flow
+
+Component dispatches an action, the saga calls the mock API, then dispatches success or
+failure, and the reducer updates the state. The create and update sagas also close the
+modal after a successful save.
