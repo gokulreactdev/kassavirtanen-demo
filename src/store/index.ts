@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import tasksReducer from "../features/tasks/taskSlice";
+import tasksReducer from "../features/tasks/tasksSlice";
 import uiReducer from "../features/tasks/uiSlice";
 import rootSaga from "./rootSaga";
 

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import TaskList from "./features/tasks/TaskList";
 import {
   fetchMetaRequest,
   fetchTasksRequest,
-} from "./features/tasks/taskSlice";
+} from "./features/tasks/tasksSlice";
 import { openCreateModal } from "./features/tasks/uiSlice";
 import { useAppDispatch } from "./store/hooks";
 
@@ -25,6 +26,8 @@ export default function App() {
           + Create Task
         </button>
       </header>
+
+      <TaskList />
     </div>
   );
 }

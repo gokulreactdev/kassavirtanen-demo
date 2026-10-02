@@ -25,7 +25,7 @@ import {
   deleteTaskRequest,
   deleteTaskSuccess,
   deleteTaskFailure,
-} from "./taskSlice";
+} from "./tasksSlice";
 import type { Project, Task, TaskPayload, User } from "./types";
 import { closeModal } from "./uiSlice";
 
